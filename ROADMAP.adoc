@@ -7,9 +7,7 @@
 
 [IMPORTANT]
 ====
-**Project specification pending upload.**
-
-This repository contains RSR infrastructure only. No application code, design documents, or functional specifications exist yet.
+Project specification drafted in `docs/SPEC.adoc`. Implementation pending.
 ====
 
 == Phase 0: Foundation (Current)
@@ -22,7 +20,7 @@ This repository contains RSR infrastructure only. No application code, design do
 | ✓ | CI/CD workflows | CodeQL, quality, security scorecard, etc.
 | ✓ | Community files | CoC, Contributing, Security (templates)
 | ✓ | Justfile | ~50 task recipes ready
-| ○ | Project specification | *Awaiting upload*
+| ✓ | Project specification | *docs/SPEC.adoc drafted*
 | ○ | STATE.scm | Pending spec
 | ○ | guix.scm / flake.nix | Pending spec
 | ○ | .well-known/* | Pending spec
@@ -32,9 +30,9 @@ Legend: ✓ = Complete | ◐ = In Progress | ○ = Not Started
 
 == Phase 1: Specification
 
-Once the project specification is uploaded:
+With the draft specification in place:
 
-* [ ] Define project purpose and scope
+* [x] Define project purpose and scope
 * [ ] Identify core modules and components
 * [ ] Select primary implementation language(s) from allowed stack
 * [ ] Create STATE.scm with phase tracking
@@ -50,6 +48,11 @@ Once the project specification is uploaded:
 * [ ] Unit test suite
 * [ ] Integration tests
 * [ ] Documentation (API docs, user guide)
+
+== Production Guardrails
+
+* [ ] Minimal rollback guard required to ship TotalUpdate
+* [ ] Auto-revert confirmation workflow
 
 == Phase 3: Hardening
 

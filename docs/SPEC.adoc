@@ -1,0 +1,160 @@
+= Total Recall Specification (Draft)
+:toc: left
+:toclevels: 2
+:icons: font
+
+Total Recall is a recovery and reversibility toolkit for users who may not know
+what went wrong, need a safe undo path, and need help detecting latent failures
+before they become disasters.
+
+== Goals
+
+* Make recovery possible for non-experts
+* Provide safe, reversible workflows by default
+* Detect and surface hidden or accumulating failures
+* Preserve user trust through transparency and consent
+
+== Core Use Cases (Three Lenses)
+
+=== 1) Known Mistake (User knows what they broke)
+
+Example: "I installed something and now my system is unstable."
+
+Requirements:
+
+* Simple rollback button with clear timeframe ("restore to yesterday")
+* Automatic checkpoints before risky actions
+* Confirmation-based safety (auto-revert if not confirmed)
+* Explain what will change before applying
+
+Deliverables:
+
+* Snapshot manager integration (btrfs/ZFS/LVM/rpm-ostree/Nix/Guix)
+* "Preview + timeout" change guard (like display settings)
+* State vault restore for user configs
+
+=== 2) Unknown Mistake (Next user finds system broken)
+
+Example: "This computer is broken, but I don't know why."
+
+Requirements:
+
+* Diagnostics that infer last-good state
+* Timeline of changes and failures
+* Ability to roll back without knowing the original cause
+* Safe-mode recovery checklist
+
+Deliverables:
+
+* Audit log scan + failure timeline
+* "Last known good" snapshot suggestion
+* Known-bad change diff (recent installs, config edits)
+
+=== 3) Latent Failure (No one realizes anything is wrong yet)
+
+Example: "Slow degradation from repeated failures or misconfigurations."
+
+Requirements:
+
+* Detection of accumulating issues (retries, errors, slowdowns)
+* Risk scoring with "early warning" thresholds
+* Preventative fixes and auto-rollback options
+
+Deliverables:
+
+* Log anomaly scan (repeated failures, rollback warnings)
+* Drift detection (config diffs vs baseline)
+* Scheduled health checks and alerts
+
+== Trust and Safety Model
+
+* Default to read-only scans
+* Require explicit user approval to apply changes
+* Always provide rollback or auto-revert where possible
+* Show a "receipt" of what changed
+
+== Recovery Strategies
+
+=== Snapshot-Based
+
+* btrfs, ZFS, LVM, Snapper
+* rpm-ostree deployments
+* Nix/Guix generations
+
+=== Transaction Logs
+
+* Operation history with reversible steps
+* Best-effort undo when snapshots are unavailable
+
+=== State Vault
+
+* Centralized store of config/state
+* Enables "clean uninstall" without losing user data
+
+=== Auto-Revert Guard
+
+* Apply change with timeout
+* If user doesn't confirm, revert automatically
+
+== Feasibility Boundaries (Honest Limits)
+
+* True undelete is not reliable on SSD/trimmed filesystems
+* Third-party installers may not support clean rollback
+* Some changes are only reversible with preexisting snapshots
+
+Total Recall must label actions as:
+
+* *Guaranteed reversible*
+* *Best-effort reversible*
+* *Not reversible*
+
+== Architecture Sketch
+
+* Detection layer (logs, package managers, config drift)
+* Recovery layer (snapshots, state vault, undo scripts)
+* UX layer (safe-mode, guided repair, confirmation timeouts)
+
+== Integration Points
+
+* DNFinition/TotalUpdate for package audit + rollback hooks
+* Feedback-a-tron for user-controlled sharing of failure reports
+
+== Roadmap (High-Level)
+
+* Phase 1: Spec + baseline recovery workflows
+* Phase 2: Diagnostics + failure timeline
+* Phase 3: Latent failure detection + alerting
+* Phase 4: Cross-platform expansion
+
+== Incident Investigation Mode (Tripod-Beta Inspired)
+
+Total Recall includes an accident-investigation workflow to explain how a
+failure happened, not just how to undo it.
+
+=== Concepts
+
+* *Event Timeline*: ordered record of changes and failures
+* *Barrier Failures*: missing or failed defenses (snapshots, updates, approvals)
+* *Root Causes*: technical and human contributors
+* *Lessons Learned*: actionable prevention guidance
+
+=== Investigation Workflow
+
+1. Collect evidence (logs, config diffs, update history, user actions)
+2. Build timeline (what changed, when, and by whom)
+3. Identify failed barriers (what should have stopped the issue)
+4. Recommend fixes and preventive controls
+
+=== Evidence Sources
+
+* System logs and package manager histories
+* Snapshot and rollback metadata
+* Configuration drift vs baseline
+* Audit logs from TotalUpdate/DNFinition
+
+=== Output Artifacts
+
+* *Incident Summary* (plain language)
+* *Technical Timeline* (ordered events)
+* *Barrier Analysis* (what failed and why)
+* *Prevention Plan* (policy + tool changes)
